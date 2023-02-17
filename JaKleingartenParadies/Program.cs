@@ -83,7 +83,7 @@ void Init(InitDto botDto)
 }
 
 
-void Result(InitDto botDto)
+async Task Result(InitDto botDto)
 {
     TellFloWinOrLoose tellFloWinOrLoose = new TellFloWinOrLoose();
     
