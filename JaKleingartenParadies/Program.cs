@@ -13,6 +13,7 @@ var client = new SocketIO("https://games.uhno.de", new SocketIOOptions() {Transp
 client.On("connect",
     async (e) =>
     {
+        Console.WriteLine("trying to Authenticate");
         await client.EmitAsync("authenticate",
             (success) => { Console.WriteLine($"Authentication successful: {success}"); }, Secret);
     });
@@ -23,29 +24,39 @@ client.On("disconnect", (e) =>
     gotDisconnected = true;
 });
 
+client.OnConnected += (sender, e) =>
+{
+    Console.WriteLine("Connected");
+};
 
 await client.ConnectAsync();
+Console.WriteLine("trying to Authenticate");
+await client.EmitAsync("authenticate",
+    (success) => { Console.WriteLine($"Authentication successful: {success}"); }, Secret);
 
-client.On("data", (response) =>
+client.On("data", async (response) =>
 {
-    var data = JsonSerializer.Deserialize<BotDto>(response.GetValue()
-                                                          .GetString());
+    BotDto data = response.GetValue<BotDto>();
+
     switch (data.type)
     {
         case "INIT":
+            Console.WriteLine("Init");
             Init(data);
 
             break;
         case "RESULT":
             Result(data);
-
+            Console.WriteLine("Result");
             break;
 
         case "SET":
-            Set(data, response);
+            await Set(data, response);
+            Console.WriteLine("Set");
             break;
         case "ROUND":
-            Round(data, response);
+            await Round(data, response);
+            Console.WriteLine("Round");
             break;
     }
 });
@@ -60,21 +71,21 @@ while (!gotDisconnected)
 
 void Init(BotDto botDto)
 {
-    throw new NotImplementedException();
+    
 }
 
 
 void Result(BotDto botDto)
 {
-    throw new NotImplementedException();
 }
-void Set(BotDto botDto, SocketIOResponse socketIoResponse)
+
+Task Set(BotDto botDto, SocketIOResponse socketIoResponse)
 {
     throw new NotImplementedException();
 }
 
 
-void Round(BotDto botDto, SocketIOResponse socketIoResponse)
+Task Round(BotDto botDto, SocketIOResponse socketIoResponse)
 {
     throw new NotImplementedException();
 }
