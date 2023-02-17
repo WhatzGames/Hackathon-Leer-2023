@@ -13,4 +13,8 @@
       <PackageReference Include="SocketIOClient" Version="3.0.7" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="SocketConnection" />
+    </ItemGroup>
+
 </Project>
