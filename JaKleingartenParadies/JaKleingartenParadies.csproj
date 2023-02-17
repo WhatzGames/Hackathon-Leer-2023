@@ -22,4 +22,10 @@
       <Folder Include="SocketConnection" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="bot1.sqlite">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

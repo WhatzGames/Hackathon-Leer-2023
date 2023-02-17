@@ -4,9 +4,10 @@
     <projectFile>JaKleingartenParadies/JaKleingartenParadies.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f62dcec6-5fcc-4431-951b-173e4a4e580e" name="Changes" comment="add Secret">
-      <change afterPath="$PROJECT_DIR$/JaKleingartenParadies/Dto/BotDto.cs" afterDir="false" />
+    <list default="true" id="f62dcec6-5fcc-4431-951b-173e4a4e580e" name="Changes" comment="add bot-Dto, add Client functions">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.JAKleingartenParadies/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.JAKleingartenParadies/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JaKleingartenParadies/Dto/BotDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/JaKleingartenParadies/Dto/BotDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JaKleingartenParadies/JaKleingartenParadies.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/JaKleingartenParadies/JaKleingartenParadies.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JaKleingartenParadies/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/JaKleingartenParadies/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -27,6 +28,7 @@
     <setting file="mock://C:/Entwicklung/Hackathon-Leer-2023/JaKleingartenParadies/Program.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/JaKleingartenParadies/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock://C:/Entwicklung/Hackathon-Leer-2023/JaKleingartenParadies/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/575c31ecc35a636b6f962cb71d53992552941a18982aae1c8e6c16305cc3761b/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -83,7 +85,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1676642484781</updated>
-      <workItem from="1676642486293" duration="4690000" />
+      <workItem from="1676642486293" duration="6798000" />
     </task>
     <task id="LOCAL-00001" summary="add missing solution">
       <created>1676642547272</created>
@@ -113,7 +115,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676644756470</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="add bot-Dto, add Client functions">
+      <created>1676647299908</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1676647299908</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -138,23 +147,24 @@
     <MESSAGE value="add migration" />
     <MESSAGE value="add socket example" />
     <MESSAGE value="add Secret" />
-    <option name="LAST_COMMIT_MESSAGE" value="add Secret" />
+    <MESSAGE value="add bot-Dto, add Client functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="add bot-Dto, add Client functions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/JaKleingartenParadies/Program.cs</url>
-          <line>14</line>
-          <properties documentPath="C:\Entwicklung\Hackathon-Leer-2023\JaKleingartenParadies\Program.cs" initialLine="10" containingFunctionPresentation="">
+          <line>45</line>
+          <properties documentPath="C:\Entwicklung\Hackathon-Leer-2023\JaKleingartenParadies\Program.cs" initialLine="44" containingFunctionPresentation="">
             <startOffsets>
-              <option value="455" />
+              <option value="1189" />
             </startOffsets>
             <endOffsets>
-              <option value="652" />
+              <option value="1210" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="3" />
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
