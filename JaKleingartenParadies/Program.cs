@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.Text.Json;
+using JaKleingartenParadies.Data;
 using JaKleingartenParadies.Dto;
 using JaKleingartenParadies.Game;
 using SocketIOClient;
@@ -81,19 +82,23 @@ void Init(BotDto botDto)
 }
 
 
-void Result(BotDto botDto)
+async Task Result(BotDto botDto)
 {
+    TellFloWinOrLoose tellFloWinOrLoose = new TellFloWinOrLoose();
+    
     foreach (var player in botDto.players)
     {
         if (player.id.Equals(games[botDto.id].SpielerId))
         {
             if (player.score == 0)
             {
+                await tellFloWinOrLoose.SentFloLoose();
                 Console.WriteLine("we lost :-(");
                 File.WriteAllText($"{botDto.id}_lost.json",JsonSerializer.Serialize(botDto.log));
             }
             else
             {
+                await tellFloWinOrLoose.SentFloWin();
                 Console.WriteLine("We won! ;-)");
                 File.WriteAllText($"{botDto.id}_won.json",JsonSerializer.Serialize(botDto.log));
             }
