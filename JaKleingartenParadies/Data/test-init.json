@@ -1,0 +1,43 @@
+[
+  [
+    {"start": [0,0], "direction": "v", "size": 2},
+    {"start": [9,0], "direction": "v", "size": 3},
+    {"start": [9,7], "direction": "v", "size": 3},
+    {"start": [0,6], "direction": "v", "size": 4},
+    {"start": [2,0], "direction": "h", "size": 5}
+  ],
+  [
+    {"start": [4,2], "direction": "v", "size": 2},
+    {"start": [7,3], "direction": "h", "size": 3},
+    {"start": [4,8], "direction": "h", "size": 3},
+    {"start": [8,5], "direction": "v", "size": 4},
+    {"start": [0,5], "direction": "h", "size": 5}
+  ],
+  [
+    {"start": [3,0], "direction": "v", "size": 2},
+    {"start": [0,0], "direction": "v", "size": 3},
+    {"start": [2,3], "direction": "h", "size": 3},
+    {"start": [6,2], "direction": "h", "size": 4},
+    {"start": [5,0], "direction": "h", "size": 5}
+  ],
+  [
+    {"start": [0,7], "direction": "h", "size": 2},
+    {"start": [3,7], "direction": "h", "size": 3},
+    {"start": [7,7], "direction": "h", "size": 3},
+    {"start": [0,9], "direction": "h", "size": 4},
+    {"start": [5,9], "direction": "h", "size": 5}
+  ],[
+    {"start": [3,0], "direction": "v", "size": 2},
+    {"start": [3,3], "direction": "v", "size": 3},
+    {"start": [3,7], "direction": "v", "size": 3},
+    {"start": [0,0], "direction": "v", "size": 4},
+    {"start": [0,5], "direction": "v", "size": 5}
+  ],
+  [
+    {"start": [8,2], "direction": "h", "size": 2},
+    {"start": [4,2], "direction": "h", "size": 3},
+    {"start": [0,2], "direction": "h", "size": 3},
+    {"start": [6,0], "direction": "h", "size": 4},
+    {"start": [0,0], "direction": "h", "size": 5}
+  ]
+]
