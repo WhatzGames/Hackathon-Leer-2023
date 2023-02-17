@@ -4,7 +4,7 @@ using System.Runtime.Loader;
 using SocketIOClient;
 using SocketIOClient.Transport;
 
-const string Secret = "";
+const string Secret = "2d376eb7-ead4-4b7c-99c0-3a21515e8cd5";
 
 var client = new SocketIO("https://games.uhno.de", new SocketIOOptions() {Transport = TransportProtocol.WebSocket});
 
