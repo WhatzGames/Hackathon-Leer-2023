@@ -3,7 +3,7 @@ namespace JaKleingartenParadies.Dto;
 
 public class InitialStartShips
 {
-    public int[] Start { get; set; } = Array.Empty<int>();
-    public string Direction { get; set; } = string.Empty;
-    public int Size { get; set; }
+    public int[] start { get; set; } = Array.Empty<int>();
+    public string direction { get; set; } = string.Empty;
+    public int size { get; set; }
 }

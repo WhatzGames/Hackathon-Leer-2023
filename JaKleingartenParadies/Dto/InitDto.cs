@@ -1,13 +1,17 @@
 ﻿namespace JaKleingartenParadies.Dto;
 
-public class BotDto
+public class InitDto
 {
     public string id { get; set; }
     public Players[] players { get; set; }
-    public char[][][] boards { get; set; }
     public Log[] log { get; set; }
     public string type { get; set; }
     public string self { get; set; }
+}
+
+public class BotDto : InitDto
+{
+    public string[][][] boards { get; set; }
 }
 
 public class Players

@@ -30,7 +30,7 @@ public class GameRunner
 
     public string SpielerId => _spielerId;
 
-    public async Task<int[]> Round(char[][] board)
+    public async Task<int[]> Round(string[][] board)
     {
         //logic
         //todo: returnwert muss noch eingebaut werden als parameter von GetHeatmap
@@ -40,26 +40,26 @@ public class GameRunner
         return GetHighestProbability(probabilityMap);
     }
 
-    private List<List<string>> TranslateBoard(char[][] board)
+    private List<List<string>> TranslateBoard(string[][] board)
     {
         List<List<string>> floRow = new();
-        foreach (char[] chars in board)
+        foreach (string[] chars in board)
         {
             List<string> floColumn = new();
-            foreach (char c in chars)
+            foreach (string c in chars)
             {
                 switch (c)
                 {
-                    case 'X':
+                    case "X":
                         floColumn.Add("W");
                         break;
-                    case ' ':
+                    case " ":
                         floColumn.Add("U");
                         break;
-                    case 'x':
+                    case "x":
                         floColumn.Add("H");
                         break;
-                    case '.':
+                    case ".":
                         floColumn.Add("M");
                         break;
                     default:
@@ -102,13 +102,13 @@ public class GameRunner
         return new int[] {xCor ,yCor };
     }
 
-    public void UpdateRemainingShips(char[][] board)
+    public void UpdateRemainingShips(string[][] board)
     {
         for (var i = 0; i < board.Length; i++)
         {
             for (var j = 0; j < board[i].Length; j++)
             {
-                if (board[i][j] == 'X')
+                if (board[i][j] == "X")
                 {
                     FindHitShip(board, i, j);
                 }
@@ -116,7 +116,7 @@ public class GameRunner
         }
     }
 
-    private void FindHitShip(char[][] board, int i, int j)
+    private void FindHitShip(string[][] board, int i, int j)
     {
         if (_foundShipLocations.Contains((i, j)))
         {
@@ -128,7 +128,7 @@ public class GameRunner
 
         for (var boardI = i+1; boardI<board.Length;boardI++)
         {
-            if (board[boardI][j] != 'X')
+            if (board[boardI][j] != "X")
                 break;
 
             length = boardI - i;
@@ -143,7 +143,7 @@ public class GameRunner
         
         for (var boardJ = j+1; boardJ< board[i].Length; boardJ++)
         {
-            if (board[i][boardJ] != 'X')
+            if (board[i][boardJ] != "X")
                 break;
 
             length = boardJ - j;

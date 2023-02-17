@@ -39,7 +39,7 @@ await client.EmitAsync("authenticate",
 
 client.On("data", async (response) =>
 {
-    BotDto data = response.GetValue<BotDto>();
+    InitDto data = response.GetValue<InitDto>();
 
     switch (data.type)
     {
@@ -58,7 +58,8 @@ client.On("data", async (response) =>
             Console.WriteLine("Set");
             break;
         case "ROUND":
-            await Round(data, response);
+            BotDto botData = response.GetValue<BotDto>();
+            await Round(botData, response);
             Console.WriteLine("Round");
             break;
     }
@@ -72,7 +73,7 @@ while (!gotDisconnected)
 }
 
 
-void Init(BotDto botDto)
+void Init(InitDto botDto)
 {
     if (!games.ContainsKey(botDto.id))
     {
@@ -81,7 +82,7 @@ void Init(BotDto botDto)
 }
 
 
-void Result(BotDto botDto)
+void Result(InitDto botDto)
 {
     foreach (var player in botDto.players)
     {
@@ -90,12 +91,12 @@ void Result(BotDto botDto)
             if (player.score == 0)
             {
                 Console.WriteLine("we lost :-(");
-                File.WriteAllText($"{botDto.id}_lost.json",JsonSerializer.Serialize(botDto.log));
+                File.WriteAllText($"{botDto.id}_lost.json",JsonSerializer.Serialize(botDto));
             }
             else
             {
                 Console.WriteLine("We won! ;-)");
-                File.WriteAllText($"{botDto.id}_won.json",JsonSerializer.Serialize(botDto.log));
+                File.WriteAllText($"{botDto.id}_won.json",JsonSerializer.Serialize(botDto));
             }
 
             break;
@@ -106,10 +107,11 @@ void Result(BotDto botDto)
     
 }
 
-async Task Set(BotDto botDto, SocketIOResponse socketIoResponse)
+async Task Set(InitDto botDto, SocketIOResponse socketIoResponse)
 {
     var resultShips = await games[botDto.id].Set();
     var resultShipsString = JsonSerializer.Serialize(resultShips);
+    Console.WriteLine("set: {0}", resultShipsString);
     await socketIoResponse.CallbackAsync(resultShipsString);
 }
 
@@ -121,5 +123,6 @@ async Task Round(BotDto botDto, SocketIOResponse socketIoResponse)
     var shoot = await games[botDto.id].Round(botDto.boards[playerIndex]);
     //todo: check ob response string oder array sein muss
     var shootString = JsonSerializer.Serialize(shoot);
+    Console.WriteLine("round: {0}", shootString);
     await socketIoResponse.CallbackAsync(shoot);
 }

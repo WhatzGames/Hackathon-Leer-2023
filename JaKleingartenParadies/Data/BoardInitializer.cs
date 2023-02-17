@@ -24,11 +24,38 @@ public class BoardInitializer : IAsyncDisposable
 
     public async Task<InitialStartShips[]> GetRandomStartBoardAsync()
     {
+        return new[] {
+            new InitialStartShips() {
+                start = new [] {4,3},
+                direction = "h",
+                size = 5
+            },
+            new InitialStartShips() {
+                start = new [] {8,6},
+                direction = "v",
+                size = 4
+            },
+            new InitialStartShips() {
+                start = new [] {1,5},
+                direction = "v",
+                size = 3
+            },
+            new InitialStartShips() {
+                start = new [] {3,5},
+                direction = "v",
+                size = 3
+            },
+            new InitialStartShips() {
+                start = new [] {5,5},
+                direction = "v",
+                size = 2
+            },
+        };
         try
         {
             JsonSerializer.Serialize(true, Options);
             var boardInits = JsonSerializer.DeserializeAsyncEnumerable<InitialStartShips[]>(_stream, Options);
-            int randomIndex = Random.Shared.Next(6);
+            int randomIndex = 1;
             var counter = 0;
             await foreach (var boardInitDtos in boardInits)
             {
