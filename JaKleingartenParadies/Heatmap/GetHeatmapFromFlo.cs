@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using JaKleingartenParadies.Dto;
 
 namespace JaKleingartenParadies.Heatmap;
 
@@ -17,7 +18,7 @@ public class GetHeatmapFromFlo
     //von flo kommt eine list<list<float>>mit der heatmap
     //post request
     //json format
-    public async Task<List<List<decimal>>> GetHeatmap(List<List<string>> grid, IEnumerable<int> ships)
+    public async Task<List<List<double>>> GetHeatmap(List<List<string>> grid, IEnumerable<int> ships)
     {
         
         //todo: anzahl der schiffe mitschicken
@@ -36,9 +37,9 @@ public class GetHeatmapFromFlo
             Console.WriteLine(await response.Content.ReadAsStringAsync());
             return null;
         }
+        
+        var responseObject = await response.Content.ReadFromJsonAsync<FlosResponseDto>();
 
-        var responseObject = await response.Content.ReadFromJsonAsync<List<List<decimal>>>();
-
-        return responseObject;
+        return responseObject.probabilities;
     }
 }

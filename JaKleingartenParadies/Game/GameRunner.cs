@@ -79,11 +79,11 @@ public class GameRunner
         return await boardInitializer.GetRandomStartBoardAsync();
     }
 
-    private int[] GetHighestProbability(List<List<decimal>> probabilitys)
+    private int[] GetHighestProbability(List<List<double>> probabilitys)
     {
         int xCor = 0;
         int yCor = 0;
-        decimal currentHigh = 0;
+        double currentHigh = 0;
         
         
         for (int y = 0; y < probabilitys.Count; y++)
