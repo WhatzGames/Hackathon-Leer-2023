@@ -108,7 +108,7 @@ void Result(BotDto botDto)
 
 async Task Set(BotDto botDto, SocketIOResponse socketIoResponse)
 {
-    var resultShips = games[botDto.id].Set();
+    var resultShips = await games[botDto.id].Set();
     var resultShipsString = JsonSerializer.Serialize(resultShips);
     await socketIoResponse.CallbackAsync(resultShipsString);
 }
@@ -116,7 +116,7 @@ async Task Set(BotDto botDto, SocketIOResponse socketIoResponse)
 
 async Task Round(BotDto botDto, SocketIOResponse socketIoResponse)
 {
-    var shoot = games[botDto.id].Round();
+    var shoot = await games[botDto.id].Round();
     //todo: check ob response string oder array sein muss
     var shootString = JsonSerializer.Serialize(shoot);
     await socketIoResponse.CallbackAsync(shoot);

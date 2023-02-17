@@ -1,4 +1,5 @@
-﻿using JaKleingartenParadies.Dto;
+﻿using JaKleingartenParadies.Data;
+using JaKleingartenParadies.Dto;
 using JaKleingartenParadies.Heatmap;
 
 namespace JaKleingartenParadies.Game;
@@ -21,16 +22,17 @@ public class GameRunner
     public async Task<int[]> Round()
     {
         //logic
-        //returnwert muss noch eingebaut werden
+        //todo: returnwert muss noch eingebaut werden als parameter von GetHeatmap
         var probabilityMap = await _heatmap.GetHeatmap(_grid);
         
         return GetHighestProbability(probabilityMap);
     }
 
-    public ShipDto[] Set()
+    public async Task<InitialStartShips[]> Set()
     {
         //logic
-        return null;
+        BoardInitializer boardInitializer = new BoardInitializer();
+        return await boardInitializer.GetRandomStartBoardAsync();
     }
 
     private int[] GetHighestProbability(List<List<decimal>> probabilitys)
