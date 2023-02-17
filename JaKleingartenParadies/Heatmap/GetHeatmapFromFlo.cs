@@ -17,13 +17,19 @@ public class GetHeatmapFromFlo
     //von flo kommt eine list<list<float>>mit der heatmap
     //post request
     //json format
-    public async Task GetHeatmap(List<List<string>> grid)
+    public async Task<List<List<decimal>>> GetHeatmap(List<List<string>> grid)
     {
-        string route = "";
+        
+        //todo: anzahl der schiffe mitschicken
+        string route = "https://probability-calculator-njgyfl6nqq-ey.a.run.app/";
         var gridJson = JsonSerializer.Serialize(grid);
 
         //response = probability map
         //10 * 10 f list
         var response = await _client.PostAsJsonAsync(route, gridJson);
+
+        var responseObject = JsonSerializer.Deserialize<List<List<decimal>>>(await response.Content.ReadAsStringAsync());
+
+        return responseObject;
     }
 }
