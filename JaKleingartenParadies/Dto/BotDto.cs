@@ -4,7 +4,7 @@ public class BotDto
 {
     public string id { get; set; }
     public Players[] players { get; set; }
-    public char[][] boards { get; set; }
+    public char[][][] boards { get; set; }
     public Log[] log { get; set; }
     public string type { get; set; }
     public string self { get; set; }

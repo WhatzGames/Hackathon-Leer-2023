@@ -116,7 +116,9 @@ async Task Set(BotDto botDto, SocketIOResponse socketIoResponse)
 
 async Task Round(BotDto botDto, SocketIOResponse socketIoResponse)
 {
-    var shoot = await games[botDto.id].Round();
+    var playerIndex = Array.FindIndex(botDto.players, players => players.id == botDto.self);
+    //TODO: Write index into class in init?
+    var shoot = await games[botDto.id].Round(botDto.boards[playerIndex]);
     //todo: check ob response string oder array sein muss
     var shootString = JsonSerializer.Serialize(shoot);
     await socketIoResponse.CallbackAsync(shoot);

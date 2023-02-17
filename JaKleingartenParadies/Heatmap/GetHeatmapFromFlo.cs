@@ -29,7 +29,7 @@ public class GetHeatmapFromFlo
         {
             Board = grid,
             RemainingShips = ships
-        });
+        }, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
         if (!response.IsSuccessStatusCode)
         {

@@ -30,13 +30,46 @@ public class GameRunner
 
     public string SpielerId => _spielerId;
 
-    public async Task<int[]> Round()
+    public async Task<int[]> Round(char[][] board)
     {
         //logic
         //todo: returnwert muss noch eingebaut werden als parameter von GetHeatmap
-        var probabilityMap = await _heatmap.GetHeatmap(_grid, _existingShips);
+        UpdateRemainingShips(board);
+        var probabilityMap = await _heatmap.GetHeatmap(TranslateBoard(board), _existingShips);
         
         return GetHighestProbability(probabilityMap);
+    }
+
+    private List<List<string>> TranslateBoard(char[][] board)
+    {
+        List<List<string>> floRow = new();
+        foreach (char[] chars in board)
+        {
+            List<string> floColumn = new();
+            foreach (char c in chars)
+            {
+                switch (c)
+                {
+                    case 'X':
+                        floColumn.Add("W");
+                        break;
+                    case ' ':
+                        floColumn.Add("U");
+                        break;
+                    case 'x':
+                        floColumn.Add("H");
+                        break;
+                    case '.':
+                        floColumn.Add("M");
+                        break;
+                    default:
+                        throw new InvalidOperationException("Invalid Character");
+                }
+            }
+            floRow.Add(floColumn);
+        }
+
+        return floRow;
     }
 
     public async Task<InitialStartShips[]> Set()
