@@ -13,7 +13,9 @@ public class BoardInitializer : IAsyncDisposable
     {
         try
         {
-            _stream = File.OpenRead("Data/test-init.json");
+            var files = Directory.EnumerateFiles("Data/").Where(x => !x.StartsWith("init")).ToArray();
+            var index = Random.Shared.Next(files.Length);
+            _stream = File.OpenRead(files[index]);
         }
         catch (Exception e)
         {
@@ -24,48 +26,9 @@ public class BoardInitializer : IAsyncDisposable
 
     public async Task<InitialStartShips[]> GetRandomStartBoardAsync()
     {
-        /*return new[] {
-            new InitialStartShips() {
-                start = new [] {4,3},
-                direction = "h",
-                size = 5
-            },
-            new InitialStartShips() {
-                start = new [] {8,6},
-                direction = "v",
-                size = 4
-            },
-            new InitialStartShips() {
-                start = new [] {1,5},
-                direction = "v",
-                size = 3
-            },
-            new InitialStartShips() {
-                start = new [] {3,5},
-                direction = "v",
-                size = 3
-            },
-            new InitialStartShips() {
-                start = new [] {5,5},
-                direction = "v",
-                size = 2
-            },
-        };*/
         try
         {
-            JsonSerializer.Serialize(true, Options);
-            var boardInits = JsonSerializer.DeserializeAsyncEnumerable<InitialStartShips[]>(_stream, Options);
-            int randomIndex = Random.Shared.Next(6);
-            var counter = 0;
-            await foreach (var boardInitDtos in boardInits)
-            {
-                if (counter < randomIndex)
-                {
-                    counter++;
-                    continue;
-                }
-                return boardInitDtos!;
-            }
+            return await JsonSerializer.DeserializeAsync<InitialStartShips[]>(_stream, Options);
         }
         catch (Exception e)
         {
@@ -82,5 +45,69 @@ public class BoardInitializer : IAsyncDisposable
     {
         GC.SuppressFinalize(this);
         return _stream.DisposeAsync();
+    }
+
+    public async Task GenerateAlternativeBoards()
+    {
+        var boards = JsonSerializer.DeserializeAsyncEnumerable<InitialStartShips[]>(_stream, Options);
+        var counter = 0;
+        await foreach (var shipsArray in boards)
+        {
+            await using (var file = File.OpenWrite($"Data/{counter}.json"))
+            {
+                await JsonSerializer.SerializeAsync(file, shipsArray);
+            };
+            
+            await using (var file = File.OpenWrite($"Data/{counter}-1.json"))
+            {
+                var flippedX = FlipBoard(shipsArray!, "h");
+                await JsonSerializer.SerializeAsync(file, flippedX);
+            };
+            await using var fileFlippedY = File.OpenWrite($"Data/{counter}-2.json");
+            var flippedY = FlipBoard(shipsArray!, "v").ToArray();
+            await JsonSerializer.SerializeAsync(fileFlippedY, flippedY);
+            
+            await using var fileFlippedXY = File.OpenWrite($"Data/{counter}-3.json");
+            var flippedXY = FlipBoard(flippedY!, "h");
+            await JsonSerializer.SerializeAsync(fileFlippedXY, flippedXY);
+            counter++;
+        }
+    }
+
+    private IEnumerable<InitialStartShips> FlipBoard(IEnumerable<InitialStartShips> ships, string direction)
+    {
+        foreach (var initialStartShips in ships)
+        {
+            yield return Flip(initialStartShips, direction);
+        }
+    }
+
+    public InitialStartShips Flip(InitialStartShips ship, string direction)
+    {
+        const float CenterAxis = 4.5f;
+
+        int firstIndex = 0;
+        int lastIndex = 1;
+        int subtraction = ship.direction != direction ? 0 : ship.size - 1;
+
+        if (direction is "v")
+        {
+            firstIndex = 1;
+            lastIndex = 0;
+        }
+        
+        var newFirstValue = (int) (CenterAxis + (CenterAxis - ship.start[firstIndex]) -  subtraction);
+        var newLastValue = ship.start[lastIndex];
+
+        var position = new int[2];
+        position[firstIndex] = newFirstValue;
+        position[lastIndex] = newLastValue;
+
+        return new InitialStartShips
+        {
+            start = position,
+            direction = ship.direction,
+            size = ship.size
+        };
     }
 }

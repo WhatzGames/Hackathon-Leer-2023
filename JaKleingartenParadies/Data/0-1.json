@@ -1,0 +1,42 @@
+﻿[
+    {
+        "start": [
+            9,
+            0
+        ],
+        "direction": "v",
+        "size": 2
+    },
+    {
+        "start": [
+            0,
+            0
+        ],
+        "direction": "v",
+        "size": 3
+    },
+    {
+        "start": [
+            0,
+            7
+        ],
+        "direction": "v",
+        "size": 3
+    },
+    {
+        "start": [
+            9,
+            6
+        ],
+        "direction": "v",
+        "size": 4
+    },
+    {
+        "start": [
+            3,
+            0
+        ],
+        "direction": "h",
+        "size": 5
+    }
+]
