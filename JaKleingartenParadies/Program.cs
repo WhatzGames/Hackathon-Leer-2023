@@ -95,13 +95,13 @@ async Task Result(InitDto botDto)
             {
                 await tellFloWinOrLoose.SentFloLoose();
                 Console.WriteLine("we lost :-(");
-                File.WriteAllText($"{botDto.id}_lost.json",JsonSerializer.Serialize(botDto));
+                File.AppendAllText("results.txt", $"{DateTime.Now:O} - won game {botDto.id}");
             }
             else
             {
                 await tellFloWinOrLoose.SentFloWin();
                 Console.WriteLine("We won! ;-)");
-                File.WriteAllText($"{botDto.id}_won.json",JsonSerializer.Serialize(botDto));
+                File.AppendAllText("results.txt", $"{DateTime.Now:O} - lost game {botDto.id}");
             }
 
             break;
@@ -117,17 +117,17 @@ async Task Set(InitDto botDto, SocketIOResponse socketIoResponse)
     var resultShips = await games[botDto.id].Set();
     var resultShipsString = JsonSerializer.Serialize(resultShips);
     Console.WriteLine("set: {0}", resultShipsString);
-    await socketIoResponse.CallbackAsync(resultShipsString);
+    await socketIoResponse.CallbackAsync(resultShips.ToList());
 }
 
 
 async Task Round(BotDto botDto, SocketIOResponse socketIoResponse)
 {
-    var playerIndex = Array.FindIndex(botDto.players, players => players.id == botDto.self);
+    var playerIndex = Array.FindIndex(botDto.players, players => players.id != botDto.self);
     //TODO: Write index into class in init?
     var shoot = await games[botDto.id].Round(botDto.boards[playerIndex]);
     //todo: check ob response string oder array sein muss
     var shootString = JsonSerializer.Serialize(shoot);
-    Console.WriteLine("round: {0}", shootString);
-    await socketIoResponse.CallbackAsync(shoot);
+    Console.WriteLine("round: id {0} {1}", botDto.self[^3..^1], shootString);
+    await socketIoResponse.CallbackAsync(shoot.ToList());
 }
