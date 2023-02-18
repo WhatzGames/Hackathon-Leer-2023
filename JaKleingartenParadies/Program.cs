@@ -7,6 +7,9 @@ using JaKleingartenParadies.Game;
 using SocketIOClient;
 using SocketIOClient.Transport;
 
+int wins = 0;
+int losses = 0;
+
 Dictionary<string, GameRunner> games = new Dictionary<string, GameRunner>();
 
 const string Secret = "2d376eb7-ead4-4b7c-99c0-3a21515e8cd5";
@@ -66,13 +69,35 @@ client.On("data", async (response) =>
     }
 });
 
+// Send stats to teams channel
+_ = Task.Run(async () =>
+{
+    var timer = new PeriodicTimer(TimeSpan.FromMinutes(30));
+    while (true)
+    {
+        Console.WriteLine("Uploading stats");
+        try
+        {
+            int winsCopy = wins;
+            int lossesCopy = losses;
+            wins = 0;
+            losses = 0;
+            await new TellFloWinOrLoose().Send(winsCopy, lossesCopy);
+            Console.WriteLine("Uploaded stats");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Uploading stats failed: {0}", ex);
+        }
+        await timer.WaitForNextTickAsync();
+    }
+});
 
 while (!gotDisconnected)
 {
     await Task.Delay(10000);
     Console.WriteLine("Still alive!");
 }
-
 
 void Init(InitDto botDto)
 {
@@ -82,34 +107,36 @@ void Init(InitDto botDto)
     }
 }
 
-
 async Task Result(InitDto botDto)
 {
-    TellFloWinOrLoose tellFloWinOrLoose = new TellFloWinOrLoose();
-    
-    foreach (var player in botDto.players)
+    try
     {
-        if (player.id.Equals(games[botDto.id].SpielerId))
+        foreach (var player in botDto.players)
         {
-            if (player.score == 0)
+            if (player.id.Equals(games[botDto.id].SpielerId))
             {
-                //await tellFloWinOrLoose.SentFloLoose();
-                Console.WriteLine("we lost :-(");
-                File.AppendAllText("results.txt", $"{DateTime.Now:O} - won game {botDto.id}\n");
+                if (player.score == 0)
+                {
+                    Console.WriteLine("we lost :-(");
+                    File.AppendAllText("results.txt", $"{DateTime.Now:O} - lost game, game={botDto.id}, self={botDto.self}\n");
+                    losses++;
+                }
+                else
+                {
+                    Console.WriteLine("We won! ;-)");
+                    File.AppendAllText("results.txt", $"{DateTime.Now:O} - won game, game={botDto.id}, self={botDto.self}\n");
+                    wins++;
+                }
+                break;
             }
-            else
-            {
-                //await tellFloWinOrLoose.SentFloWin();
-                Console.WriteLine("We won! ;-)");
-                File.AppendAllText("results.txt", $"{DateTime.Now:O} - lost game {botDto.id}\n");
-            }
-
-            break;
         }
+        
+        games.Remove(botDto.id);
     }
-    
-    games.Remove(botDto.id);
-    
+    catch (Exception ex)
+    {
+        Console.WriteLine("Exception in Result: {0}", ex);
+    }
 }
 
 async Task Set(InitDto botDto, SocketIOResponse socketIoResponse)

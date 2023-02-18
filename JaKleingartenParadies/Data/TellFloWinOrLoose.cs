@@ -7,7 +7,7 @@ public class TellFloWinOrLoose
 {
     private readonly TellFloWinOrLooseDto _tellFloWinOrLooseDto;
     private readonly string ConnectionString;
-    private HttpClient _client;
+    private readonly HttpClient _client;
     
     public TellFloWinOrLoose()
     {
@@ -16,21 +16,16 @@ public class TellFloWinOrLoose
         _client = new HttpClient();
     }
 
-    public async Task SentFloWin()
+    public async Task Send(int wins, int losses)
     {
-        _tellFloWinOrLooseDto.status = "success";
-        _tellFloWinOrLooseDto.message = "kurt rocks!";
-        _tellFloWinOrLooseDto.title = "win";
-
-        await _client.PostAsJsonAsync(ConnectionString, _tellFloWinOrLooseDto);
-    }
-
-    public async Task SentFloLoose()
-    {
-        _tellFloWinOrLooseDto.status = "failure";
-        _tellFloWinOrLooseDto.message = "flo rocks not!";
-        _tellFloWinOrLooseDto.title = "loss";
+        string winrateString;
+        winrateString = wins == 0 
+            ? "can not calculate winrate: wins = 0" 
+            : ((double) wins / (wins + losses)).ToString("P");
         
+        _tellFloWinOrLooseDto.message = $"wins: {wins}\n\r"
+                                      + $"losses: {losses}\n\r"
+                                      + $"winrate: {winrateString}";
         await _client.PostAsJsonAsync(ConnectionString, _tellFloWinOrLooseDto);
     }
 }

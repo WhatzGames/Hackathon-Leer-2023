@@ -35,7 +35,6 @@ public class GameRunner
     public async Task<int[]> Round(string[][] board)
     {
         //logic
-        //todo: returnwert muss noch eingebaut werden als parameter von GetHeatmap
         UpdateRemainingShips(board);
         var probabilityMap = await _heatmap.GetHeatmap(_spielerId, TranslateBoard(board), _existingShips);
         var probability = GetHighestProbability(probabilityMap);
@@ -48,25 +47,25 @@ public class GameRunner
         // });
         // File.AppendAllText($"ROUND_{_spielerId}.json", value);
 
-        var sb = new StringBuilder();
-        sb.AppendLine("board:");
-        for (var i = 0; i < board.Length; i++)
-        {
-            for (var j = 0; j < board.Length; j++)
-            {
-                if (board[i][j] == "")
-                {
-                    sb.Append(' ');
-                    continue;
-                }
-                sb.Append(board[i][j]);
-            }
-            sb.AppendLine();
-        }
-
-        sb.AppendLine($"ships remaining: ({string.Join(',', _existingShips)})");
-        sb.Append($"next shot: ({probability[0]},{probability[1]})\n\n");
-        File.AppendAllText($"ROUND_{_spielerId}.json", sb.ToString());
+        // var sb = new StringBuilder();
+        // sb.AppendLine("board:");
+        // for (var i = 0; i < board.Length; i++)
+        // {
+        //     for (var j = 0; j < board.Length; j++)
+        //     {
+        //         if (board[i][j] == "")
+        //         {
+        //             sb.Append(' ');
+        //             continue;
+        //         }
+        //         sb.Append(board[i][j]);
+        //     }
+        //     sb.AppendLine();
+        // }
+        //
+        // sb.AppendLine($"ships remaining: ({string.Join(',', _existingShips)})");
+        // sb.Append($"next shot: ({probability[0]},{probability[1]})\n\n");
+        // File.AppendAllText($"ROUND_{_spielerId}.json", sb.ToString());
 
         return probability;
     }
@@ -155,13 +154,12 @@ public class GameRunner
         _foundShipLocations.Add((i, j));
         
         int length = 0;
-
-        for (var boardI = i+1; boardI<board.Length;boardI++)
+        for (var boardI = i + 1; boardI < board.Length; boardI++)
         {
             if (board[boardI][j] != "X")
                 break;
 
-            length = boardI - i;
+            length = (boardI - i) + 1;
             _foundShipLocations.Add((boardI, j));
         }
 
@@ -171,12 +169,12 @@ public class GameRunner
             return;
         }
         
-        for (var boardJ = j+1; boardJ< board[i].Length; boardJ++)
+        for (var boardJ = j + 1; boardJ < board[i].Length; boardJ++)
         {
             if (board[i][boardJ] != "X")
                 break;
 
-            length = boardJ - j;
+            length = (boardJ - j) + 1;
             _foundShipLocations.Add((i, boardJ));
         }
 
