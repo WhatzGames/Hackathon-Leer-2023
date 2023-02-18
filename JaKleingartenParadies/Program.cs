@@ -93,15 +93,15 @@ async Task Result(InitDto botDto)
         {
             if (player.score == 0)
             {
-                await tellFloWinOrLoose.SentFloLoose();
+                //await tellFloWinOrLoose.SentFloLoose();
                 Console.WriteLine("we lost :-(");
-                File.AppendAllText("results.txt", $"{DateTime.Now:O} - won game {botDto.id}");
+                File.AppendAllText("results.txt", $"{DateTime.Now:O} - won game {botDto.id}\n");
             }
             else
             {
-                await tellFloWinOrLoose.SentFloWin();
+                //await tellFloWinOrLoose.SentFloWin();
                 Console.WriteLine("We won! ;-)");
-                File.AppendAllText("results.txt", $"{DateTime.Now:O} - lost game {botDto.id}");
+                File.AppendAllText("results.txt", $"{DateTime.Now:O} - lost game {botDto.id}\n");
             }
 
             break;

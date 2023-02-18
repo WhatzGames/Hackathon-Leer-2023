@@ -54,12 +54,18 @@ public class GameRunner
         {
             for (var j = 0; j < board.Length; j++)
             {
+                if (board[i][j] == "")
+                {
+                    sb.Append(' ');
+                    continue;
+                }
                 sb.Append(board[i][j]);
             }
             sb.AppendLine();
         }
 
-        sb.Append($"next shot: {probability}\n\n");
+        sb.AppendLine($"ships remaining: ({string.Join(',', _existingShips)})");
+        sb.Append($"next shot: ({probability[0]},{probability[1]})\n\n");
         File.AppendAllText($"ROUND_{_spielerId}.json", sb.ToString());
 
         return probability;
