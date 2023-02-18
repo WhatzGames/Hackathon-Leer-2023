@@ -1,4 +1,6 @@
-﻿using JaKleingartenParadies.Data;
+﻿using System.Text;
+using System.Text.Json;
+using JaKleingartenParadies.Data;
 using JaKleingartenParadies.Dto;
 using JaKleingartenParadies.Heatmap;
 
@@ -35,9 +37,32 @@ public class GameRunner
         //logic
         //todo: returnwert muss noch eingebaut werden als parameter von GetHeatmap
         UpdateRemainingShips(board);
-        var probabilityMap = await _heatmap.GetHeatmap(TranslateBoard(board), _existingShips);
+        var probabilityMap = await _heatmap.GetHeatmap(_spielerId, TranslateBoard(board), _existingShips);
+        var probability = GetHighestProbability(probabilityMap);
         
-        return GetHighestProbability(probabilityMap);
+        // var value = JsonSerializer.Serialize(new
+        // {
+        //     board,
+        //     probabilityMap,
+        //     probability
+        // });
+        // File.AppendAllText($"ROUND_{_spielerId}.json", value);
+
+        var sb = new StringBuilder();
+        sb.AppendLine("board:");
+        for (var i = 0; i < board.Length; i++)
+        {
+            for (var j = 0; j < board.Length; j++)
+            {
+                sb.Append(board[i][j]);
+            }
+            sb.AppendLine();
+        }
+
+        sb.Append($"next shot: {probability}\n\n");
+        File.AppendAllText($"ROUND_{_spielerId}.json", sb.ToString());
+
+        return probability;
     }
 
     private List<List<string>> TranslateBoard(string[][] board)
@@ -53,7 +78,7 @@ public class GameRunner
                     case "X":
                         floColumn.Add("W");
                         break;
-                    case " ":
+                    case "":
                         floColumn.Add("U");
                         break;
                     case "x":
@@ -85,7 +110,6 @@ public class GameRunner
         int yCor = 0;
         double currentHigh = 0;
         
-        
         for (int y = 0; y < probabilitys.Count; y++)
         {
             for (int x = 0; x < probabilitys[y].Count; x++)
@@ -99,7 +123,7 @@ public class GameRunner
             }
         }
         
-        return new int[] {xCor ,yCor };
+        return new int[] {yCor ,xCor };
     }
 
     public void UpdateRemainingShips(string[][] board)
