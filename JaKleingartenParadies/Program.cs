@@ -1,160 +1,22 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using JaKleingartenParadies.Game;
 
-using System.Text.Json;
-using JaKleingartenParadies.Data;
-using JaKleingartenParadies.Dto;
-using JaKleingartenParadies.Game;
-using SocketIOClient;
-using SocketIOClient.Transport;
+const string SecretJaTastic = "2d376eb7-ead4-4b7c-99c0-3a21515e8cd5";
+const string SecretJaTasticInvers = "f174f270-0271-4076-b314-25e6df884b3b";
+const string SecretJaTestical1 = "74c3eaa1-afd4-461d-94b1-e17322b484ab";
+const string SecretJaTestical2 = "1339ed02-36ba-45c0-95da-b777ee8f5cb6";
 
-int wins = 0;
-int losses = 0;
+Bot JaTastic = new JaTasticBot(SecretJaTastic);
+// Bot JaTasticInvers = new JaTasticInversBot(SecretJaTasticInvers);
+// Bot testical1 = new JaTasticBot(SecretJaTestical1);
+// Bot testical2 = new JaTasticBot(SecretJaTestical2);
 
-Dictionary<string, GameRunner> games = new Dictionary<string, GameRunner>();
-
-const string Secret = "2d376eb7-ead4-4b7c-99c0-3a21515e8cd5";
-bool gotDisconnected = false;
-
-var client = new SocketIO("https://games.uhno.de", new SocketIOOptions() {Transport = TransportProtocol.WebSocket});
-
-client.On("connect",
-    async (e) =>
-    {
-        Console.WriteLine("trying to Authenticate");
-        await client.EmitAsync("authenticate",
-            (success) => { Console.WriteLine($"Authentication successful: {success}"); }, Secret);
-    });
-
-client.On("disconnect", (e) =>
+_ = JaTastic.Start();
+// _ = JaTasticInvers.Start();
+// _ = testical1.Start();
+// _ = testical2.Start();
+    
+while (true)
 {
-    Console.WriteLine("Disconnected");
-    gotDisconnected = true;
-});
-
-client.OnConnected += (sender, e) =>
-{
-    Console.WriteLine("Connected");
-};
-
-await client.ConnectAsync();
-Console.WriteLine("trying to Authenticate");
-await client.EmitAsync("authenticate",
-    (success) => { Console.WriteLine($"Authentication successful: {success}"); }, Secret);
-
-client.On("data", async (response) =>
-{
-    InitDto data = response.GetValue<InitDto>();
-
-    switch (data.type)
-    {
-        case "INIT":
-            Console.WriteLine("Init");
-            Init(data);
-
-            break;
-        case "RESULT":
-            Result(data);
-            Console.WriteLine("Result");
-            break;
-
-        case "SET":
-            await Set(data, response);
-            Console.WriteLine("Set");
-            break;
-        case "ROUND":
-            BotDto botData = response.GetValue<BotDto>();
-            await Round(botData, response);
-            Console.WriteLine("Round");
-            break;
-    }
-});
-
-// Send stats to teams channel
-_ = Task.Run(async () =>
-{
-    var timer = new PeriodicTimer(TimeSpan.FromMinutes(30));
-    while (true)
-    {
-        Console.WriteLine("Uploading stats");
-        try
-        {
-            int winsCopy = wins;
-            int lossesCopy = losses;
-            wins = 0;
-            losses = 0;
-            await new TellFloWinOrLoose().Send(winsCopy, lossesCopy);
-            Console.WriteLine("Uploaded stats");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Uploading stats failed: {0}", ex);
-        }
-        await timer.WaitForNextTickAsync();
-    }
-});
-
-while (!gotDisconnected)
-{
-    await Task.Delay(10000);
-    Console.WriteLine("Still alive!");
-}
-
-void Init(InitDto botDto)
-{
-    if (!games.ContainsKey(botDto.id))
-    {
-        games[botDto.id] = new GameRunner( botDto.self );
-    }
-}
-
-async Task Result(InitDto botDto)
-{
-    try
-    {
-        foreach (var player in botDto.players)
-        {
-            if (player.id.Equals(games[botDto.id].SpielerId))
-            {
-                if (player.score == 0)
-                {
-                    Console.WriteLine("we lost :-(");
-                    File.AppendAllText("results.txt", $"{DateTime.Now:O} - lost game, game={botDto.id}, self={botDto.self}\n");
-                    losses++;
-                }
-                else
-                {
-                    Console.WriteLine("We won! ;-)");
-                    File.AppendAllText("results.txt", $"{DateTime.Now:O} - won game, game={botDto.id}, self={botDto.self}\n");
-                    wins++;
-                }
-                break;
-            }
-        }
-        
-        games.Remove(botDto.id);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("Exception in Result: {0}", ex);
-    }
-}
-
-async Task Set(InitDto botDto, SocketIOResponse socketIoResponse)
-{
-    var resultShips = await games[botDto.id].Set();
-    var resultShipsString = JsonSerializer.Serialize(resultShips);
-    Console.WriteLine("set: {0}", resultShipsString);
-    await socketIoResponse.CallbackAsync(resultShips.ToList());
-}
-
-
-async Task Round(BotDto botDto, SocketIOResponse socketIoResponse)
-{
-    var playerIndex = Array.FindIndex(botDto.players, players => players.id != botDto.self);
-    //TODO: Write index into class in init?
-    var shoot = await games[botDto.id].Round(botDto.boards[playerIndex]);
-    //todo: check ob response string oder array sein muss
-    var shootString = JsonSerializer.Serialize(shoot);
-    Console.WriteLine("round: id {0} {1}", botDto.self[^3..^1], shootString);
-    await socketIoResponse.CallbackAsync(shoot.ToList());
+    Console.WriteLine("Still alive :) ");
+    await Task.Delay(20000);
 }

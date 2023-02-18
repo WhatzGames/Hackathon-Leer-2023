@@ -5,7 +5,6 @@ namespace JaKleingartenParadies.DB;
 public class BotContext : DbContext
 {
     public static readonly string ConnectionsString = "Data Source=bot1.sqlite";
-
     public BotContext() : base()
     {
         
