@@ -6,12 +6,12 @@ const string SecretJaTestical1 = "74c3eaa1-afd4-461d-94b1-e17322b484ab";
 const string SecretJaTestical2 = "1339ed02-36ba-45c0-95da-b777ee8f5cb6";
 
 Bot JaTastic = new JaTasticBot(SecretJaTastic);
-// Bot JaTasticInvers = new JaTasticInversBot(SecretJaTasticInvers);
+Bot JaTasticInvers = new JaTasticInversBot(SecretJaTasticInvers);
 // Bot testical1 = new JaTasticBot(SecretJaTestical1);
 // Bot testical2 = new JaTasticBot(SecretJaTestical2);
 
 _ = JaTastic.Start();
-// _ = JaTasticInvers.Start();
+_ = JaTasticInvers.Start();
 // _ = testical1.Start();
 // _ = testical2.Start();
     

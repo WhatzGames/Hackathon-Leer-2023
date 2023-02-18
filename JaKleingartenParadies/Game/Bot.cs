@@ -26,6 +26,12 @@ public class Bot
 
     }
 
+    public virtual AimingMode AimingMode
+    {
+        get => AimingMode.Optimized;
+    }  
+
+
     public async Task Start()
     {
         _client.On("disconnect", (e) =>
@@ -150,7 +156,7 @@ public class Bot
     {
         var playerIndex = Array.FindIndex(botDto.players, players => players.id != botDto.self);
         //TODO: Write index into class in init?
-        var shoot = await _games[botDto.id].Round(botDto.boards[playerIndex]);
+        var shoot = await _games[botDto.id].Round(botDto.boards[playerIndex], AimingMode);
         //todo: check ob response string oder array sein muss
         var shootString = JsonSerializer.Serialize(shoot);
         Console.WriteLine("round: id {0} {1}", botDto.self[^3..^1], shootString);

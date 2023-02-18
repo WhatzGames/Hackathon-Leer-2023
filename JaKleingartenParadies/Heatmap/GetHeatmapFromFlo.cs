@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using JaKleingartenParadies.Dto;
+using JaKleingartenParadies.Game;
 
 namespace JaKleingartenParadies.Heatmap;
 
@@ -20,11 +21,16 @@ public class GetHeatmapFromFlo
     //von flo kommt eine list<list<float>>mit der heatmap
     //post request
     //json format
-    public async Task<List<List<double>>> GetHeatmap(string spielerId, List<List<string>> grid, IEnumerable<int> ships)
+    public async Task<List<List<double>>> GetHeatmap(string spielerId,
+        List<List<string>> grid,
+        IEnumerable<int> ships,
+        AimingMode aimingMode)
     {
         
         //todo: anzahl der schiffe mitschicken
-        string route = "https://probability-calculator-njgyfl6nqq-ey.a.run.app/";
+        string route = aimingMode == AimingMode.Optimized ? 
+            "https://probability-calculator-njgyfl6nqq-ey.a.run.app/"
+                :"https://bad-probability-calculator-njgyfl6nqq-ey.a.run.app";
 
         //response = probability map
         //10 * 10 f list

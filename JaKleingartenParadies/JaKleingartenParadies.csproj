@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Meta" />
       <Folder Include="Migrations" />
       <Folder Include="SocketConnection" />
     </ItemGroup>

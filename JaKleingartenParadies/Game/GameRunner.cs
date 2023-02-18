@@ -32,11 +32,11 @@ public class GameRunner
 
     public string SpielerId => _spielerId;
 
-    public async Task<int[]> Round(string[][] board)
+    public async Task<int[]> Round(string[][] board, AimingMode aimingMode)
     {
         //logic
         UpdateRemainingShips(board);
-        var probabilityMap = await _heatmap.GetHeatmap(_spielerId, TranslateBoard(board), _existingShips);
+        var probabilityMap = await _heatmap.GetHeatmap(_spielerId, TranslateBoard(board), _existingShips, aimingMode);
         var probability = GetHighestProbability(probabilityMap);
         
         // var value = JsonSerializer.Serialize(new
